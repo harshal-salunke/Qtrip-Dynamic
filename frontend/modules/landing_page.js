@@ -18,7 +18,7 @@ async function fetchCities() {
     let response = await fetch(config.backendEndpoint + "/cities"); //use await with fetch and correct URL data inside fetch().
     let user = await response.json();
     console.log(user);
-    return user;//put return data into variable.
+    return user; //put return data into variable.
   } catch (err) {
     return null;
   }
@@ -28,12 +28,28 @@ async function fetchCities() {
 function addCityToDOM(id, city, description, image) {
   // TODO: MODULE_CITIES
   // 1. Populate the City details and insert those details into the DOM
-  let container = document.createElement('div');
-  container.className = 'col-6 col-lg-4 mb-4'
-  container.innerHTML = `<p>${city}<p><img src = "${image}" class ="img-response">`
-  container.innerHTML = innerHTML;
+  let row = document.getElementById("data");
+  let container = document.createElement("div");
+  container.className = "col-6 col-lg-3 mb-4";
 
-  document.getElementById("data").appendChild(container);
+  let a = document.createElement("a");
+  a.href = `pages/adventures/?city=${id}`;
+  a.id = id;
+  a.innerHTML = `<div class="tile">
+    <div class="tile-text text-center">
+      <h5>${city}</h5>
+      <p>${description}</p>
+    </div>
+      <img class="img-responsive" src=${image}>
+  </div>`;
+
+  container.append(a)
+  row.appendChild(container)
+  // let container = document.createElement('div');
+  // console.log(container);
+  // container.className = 'tile'
+  // container.innerHTML = `<p>${city}${id}${description}<p><img src = "${image}" class ="img-response">`
+
+  // document.getElementById("data").appendChild(container);
 }
-
 export { init, fetchCities, addCityToDOM };
