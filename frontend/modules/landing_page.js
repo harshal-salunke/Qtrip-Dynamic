@@ -28,28 +28,19 @@ async function fetchCities() {
 function addCityToDOM(id, city, description, image) {
   // TODO: MODULE_CITIES
   // 1. Populate the City details and insert those details into the DOM
-  let row = document.getElementById("data");
-  let container = document.createElement("div");
-  container.className = "col-6 col-lg-3 mb-4";
-
-  let a = document.createElement("a");
-  a.href = `pages/adventures/?city=${id}`;
-  a.id = id;
-  a.innerHTML = `<div class="tile">
-    <div class="tile-text text-center">
-      <h5>${city}</h5>
-      <p>${description}</p>
-    </div>
-      <img class="img-responsive" src=${image}>
-  </div>`;
-
-  container.append(a)
-  row.appendChild(container)
-  // let container = document.createElement('div');
-  // console.log(container);
-  // container.className = 'tile'
-  // container.innerHTML = `<p>${city}${id}${description}<p><img src = "${image}" class ="img-response">`
-
-  // document.getElementById("data").appendChild(container);
+  const ele = document.createElement('div')
+  ele.className = 'col-6 col-lg-3 mb-4';
+  ele.innerHTML = `
+            <a href = "pages/adventures/?city=${id} id = ${id}">
+              <div class = "tile">
+                <div class = "tile-text text-center">
+                  <h5>${city}</h5>
+                  <p>${description}</p>
+                </div>
+                <img class = "img-responsive" src = "${image}" /></div>
+            </a>
+          `;
+  document.getElementById("data").appendChild(ele);
 }
+
 export { init, fetchCities, addCityToDOM };

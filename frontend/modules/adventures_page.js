@@ -5,6 +5,9 @@ import config from "../conf/index.js";
 function getCityFromURL(search) {
   // TODO: MODULE_ADVENTURES
   // 1. Extract the city id from the URL's Query Param and return it
+  let city = await getCityFromURL('?city=bengaluru');
+  return city
+
 
 }
 
@@ -12,6 +15,14 @@ function getCityFromURL(search) {
 async function fetchAdventures(city) {
   // TODO: MODULE_ADVENTURES
   // 1. Fetch adventures using the Backend API and return the data
+  try {
+    let response = await fetch(config.backendEndpoint + "/adventures"); //use await with fetch and correct URL data inside fetch().
+    let user = await response.json();
+    console.log(user);
+    return user; //put return data into variable.
+  } catch (err) {
+    return null;
+  }
 
 }
 
@@ -19,7 +30,7 @@ async function fetchAdventures(city) {
 function addAdventureToDOM(adventures) {
   // TODO: MODULE_ADVENTURES
   // 1. Populate the Adventure Cards and insert those details into the DOM
-
+   
 }
 
 //Implementation of filtering by duration which takes in a list of adventures, the lower bound and upper bound of duration and returns a filtered list of adventures.
