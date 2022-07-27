@@ -128,7 +128,7 @@
             let city = await getCityFromURL(window.location.search);
 
             //Fetches the adventures for the particular city
-            adventures = await fetchAdventures(city);
+            let adventures = await fetchAdventures(city);
 
             //Applies filters on the adventures list
             let filteredAdventures = filterFunction(adventures, filters);
