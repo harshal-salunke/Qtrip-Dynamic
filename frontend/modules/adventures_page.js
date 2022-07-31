@@ -59,7 +59,11 @@ function addAdventureToDOM(adventures) {
 function filterByDuration(list, low, high) {
   // TODO: MODULE_FILTERS
   // 1. Filter adventures based on Duration and return filtered list
-  return list.filter((adv) => adv.duration >= low && adv.duration <= high);
+  console.log(low, "low time")
+    console.log( high,"high time")
+  const filterduration = list.filter((adv) => adv.duration >= low && adv.duration <= high);
+  console.log(filterduration,"filterduration")
+  return filterduration;
 }
 
 //Implementation of filtering by category which takes in a list of adventures, list of categories to be filtered upon and returns a filtered list of adventures.
@@ -94,26 +98,32 @@ function filterFunction(list, filters) {
   // TODO: MODULE_FILTERS
   // 1. Handle the 3 cases detailed in the comments above and return the filtered list of adventures
   // 2. Depending on which filters are needed, invoke the filterByDuration() and/or filterByCategory() methods
+  let newArray = [];
   if (filters["duration"].length > 0 && filters["category"].length > 0) {
-    let lowTime = filters.duration.split("-")[0];
-    let highTime = filters.duration.split("-")[1];
-    let range = filterByDuration(list, lowTime, highTime);
-    return filterByCategory(range, filters["category"]);
+    // let lowTime = filters.duration.split("-")[0];
+    // let highTime = filters.duration.split("-")[1];
+    let duration = filters["duration"].split("-");
+    
+    newArray = filterByDuration(list, parseInt(duration[0]), parseInt(duration[1]));
+    newArray = filterByCategory(newArray, filters["category"]);
 
   } else if (filters["duration"].length > 0) {
-    let lowTime = filters.duration.split("-")[0];
-    let highTime = filters.duration.split("-")[1];
-    return filterByDuration(list, lowTime, highTime);
+    // let lowTime = filters.duration.split("-")[0];
+    // let highTime = filters.duration.split("-")[1];
+    let duration = filters["duration"].split("-");
+    newArray = filterByDuration(list, parseInt(duration[0]), parseInt(duration[1]));
+
 
   } else if (filters["category"].length > 0) {
-    return filterByCategory(list, filters["category"]);
+    newArray = filterByCategory(list, filters["category"]);
 
   } else {
-    return list;
+    return newArray=list;
   }
+  return newArray;
 
   // Place holder for functionality to work in the Stubs
-  return list;
+  
 }
 
 //Implementation of localStorage API to save filters to local storage. This should get called everytime an onChange() happens in either of filter dropdowns
