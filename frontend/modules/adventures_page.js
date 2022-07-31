@@ -141,7 +141,8 @@ function getFiltersFromLocalStorage() {
 function generateFilterPillsAndUpdateDOM(filters) {
   // TODO: MODULE_FILTERS
   // 1. Use the filters given as input, update the Duration Filter value and Generate Category Pills
-  filters["category"].forEach((key) => {
+  const categoryFilter = filters["category"]
+  categoryFilter.forEach((key) => {
     let divElementPills = document.createElement("div");
     divElementPills.className = "category-filter";
     divElementPills.innerHTML = `
