@@ -19,10 +19,10 @@ async function fetchAdventures(city) {
     let response = await fetch(
       config.backendEndpoint + `/adventures?city=${city}`
     ); //use await with fetch and correct URL data inside fetch().
-    let user = await response.json();
-    console.log(user);
+    const user = await response.json();
+    // console.log(user);
     return user; //put return data into variable.
-  } catch (err) {
+  } catch (err) { //exception
     return null;
   }
 }
@@ -31,27 +31,28 @@ async function fetchAdventures(city) {
 function addAdventureToDOM(adventures) {
   // TODO: MODULE_ADVENTURES
   // 1. Populate the Adventure Cards and insert those details into the DOM
-  adventures.map((adventure, index) => {
+  console.log(adventures);
+  adventures.forEach((adventure) => {
     let divElement = document.createElement("div");
     divElement.className = "col-6 col-sm-4 col-lg-3 mb-4";
     divElement.innerHTML = `
     <a href="detail/?adventure=${adventure.id}" id=${adventure.id}
-    <div class="activity-card">
-    <div class="category-banner">${adventure.category}</div>
-    <img class="img-responsive" src="${adventure.image}" />
-      <div class="adventure-card-text w-100 text-md-center mt-2">
-      <div class="d-block d-md-flex justify-content-between flex-wrap pl-3 pr-3 px-2"
-        <h5>${adventure.name}</h5>
-        <p>&#x20B9;${adventure.costPerHead}</p>
-      </div>
-      <div class="d-block d-md-flex justify-content-between flex-wrap pl-3 pr-3 px-2"
-        <h5>Duration</h5>
-        <p>${adventure.duration} hours</p>
-      </div>
+      <div class="activity-card">
+        <div class="category-banner">${adventure.category}</div>
+        <img class="img-responsive" src="${adventure.image}" />
+        <div class="adventure-card-text w-100 text-md-center mt-2">
+          <div class="d-block d-md-flex justify-content-between flex-wrap pl-3 pr-3 "
+            <h5 class="text-left">${adventure.name}</h5>
+            <p>${adventure.costPerHead}</p>
+          </div>
+        <div class="d-block d-md-flex justify-content-between flex-wrap pl-3 pr-3 "
+          <h5 class="text-left">Duration</h5>
+          <p>${adventure.duration} hours</p>
+        </div>
       </div>
     </a>
     `;
-    document.getElementById("data").appendChild(divElement);
+    document.getElementById("data").append(divElement);
   });
 }
 
@@ -59,32 +60,32 @@ function addAdventureToDOM(adventures) {
 function filterByDuration(list, low, high) {
   // TODO: MODULE_FILTERS
   // 1. Filter adventures based on Duration and return filtered list
-  console.log(low, "low time")
-    console.log( high,"high time")
-  const filterduration = list.filter((adv) => adv.duration >= low && adv.duration <= high);
-  console.log(filterduration,"filterduration")
-  return filterduration;
+  // console.log(low, "low time")
+  //   console.log( high,"high time")
+  return list.filter((adv) => adv.duration>=low && adv.duration<=high);
+  // console.log(filterduration,"filterduration")
+  // return filterduration;
 }
 
 //Implementation of filtering by category which takes in a list of adventures, list of categories to be filtered upon and returns a filtered list of adventures.
 function filterByCategory(list, categoryList) {
   // TODO: MODULE_FILTERS
   // 1. Filter adventures based on their Category and return filtered list
-  let filteredAdv = [];
+  // let filteredAdv = [];
+  // for (let i = 0; i < categoryList.length; i++) {
+  //   console.log(list);
+  //   let filterCurrCat = list.filter(adv => adv.category===categoryList[i]);
 
-  for (let i = 0; i < categoryList.length; i++) {
-    let filterCurrCat = list.filter((adv) => adv.category === categoryList[i]);
+  //   filterCurrCat.forEach((adv) => { filteredAdv.push(adv)});
+  // }
 
-    filterCurrCat.forEach((adv) => {
-      filteredAdv.push(adv);
-    });
-  }
-  console.log(filteredAdv,"filteredAdv")
+  const filteredList = list.filter(adventure => categoryList.includes(adventure.category));
 
-  return filteredAdv;
-
+  return filteredList
+  // console.log(filteredAdv, "filteredAdv");
+  // return filteredAdv;
   // console.log(filterAdvByCategory);
-  return filterAdvByCategory;
+  // return filterAdvByCategory;
 }
 
 // filters object looks like this filters = { duration: "", category: [] };
@@ -98,32 +99,28 @@ function filterFunction(list, filters) {
   // TODO: MODULE_FILTERS
   // 1. Handle the 3 cases detailed in the comments above and return the filtered list of adventures
   // 2. Depending on which filters are needed, invoke the filterByDuration() and/or filterByCategory() methods
-  let newArray = [];
+  console.log(list);
   if (filters["duration"].length > 0 && filters["category"].length > 0) {
     // let lowTime = filters.duration.split("-")[0];
     // let highTime = filters.duration.split("-")[1];
-    let duration = filters["duration"].split("-");
-    
-    newArray = filterByDuration(list, parseInt(duration[0]), parseInt(duration[1]));
-    newArray = filterByCategory(newArray, filters["category"]);
-
+    let lowTime = filters.duration.split("-")[0];
+    let highTime = filters.duration.split("-")[1];
+    let durationFiltered = filterByDuration(list, lowTime, highTime);
+    return filterByCategory(durationFiltered, filters.category);
   } else if (filters["duration"].length > 0) {
     // let lowTime = filters.duration.split("-")[0];
     // let highTime = filters.duration.split("-")[1];
-    let duration = filters["duration"].split("-");
-    newArray = filterByDuration(list, parseInt(duration[0]), parseInt(duration[1]));
-
+    let lowTime = filters.duration.split("-")[0];
+    let highTime = filters.duration.split("-")[1];
+    return filterByDuration(list, lowTime, highTime);
 
   } else if (filters["category"].length > 0) {
-    newArray = filterByCategory(list, filters["category"]);
-
+    return filterByCategory(list, filters["category"]);
   } else {
-    return newArray=list;
+    return list;
   }
-  return newArray;
 
   // Place holder for functionality to work in the Stubs
-  
 }
 
 //Implementation of localStorage API to save filters to local storage. This should get called everytime an onChange() happens in either of filter dropdowns
@@ -151,19 +148,17 @@ function getFiltersFromLocalStorage() {
 function generateFilterPillsAndUpdateDOM(filters) {
   // TODO: MODULE_FILTERS
   // 1. Use the filters given as input, update the Duration Filter value and Generate Category Pills
-  const categoryFilter = filters["category"]
-  categoryFilter.forEach((key) => {
-    let divElementPills = document.createElement("div");
-    divElementPills.className = "category-filter";
-    divElementPills.innerHTML = `
-      <div>${key}</div>
-    `;
-    document.getElementById("category-list").appendChild(divElementPills);
-    });
-  
-  if (filters["duration"]) {
-    document.getElementById("duration-select").value = filters["duration"];
-  }
+  let categoryList = filters.category;
+  let catListEle = document.getElementById('category-list');
+  categoryList.forEach(function (category) {
+    let divEle = document.createElement('div');
+    divEle.className = 'category-filter';
+    divEle.innerText = category;
+    catListEle.append(divEle);
+  });
+
+  let durationEle = document.getElementById('duration-select');
+  durationEle.value = filters.duration;
 }
 export {
   getCityFromURL,

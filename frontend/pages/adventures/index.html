@@ -128,9 +128,10 @@
             let city = await getCityFromURL(window.location.search);
 
             //Fetches the adventures for the particular city
-            let adventures = await fetchAdventures(city);
+            adventures = await fetchAdventures(city);
 
             //Applies filters on the adventures list
+            console.log(adventures);
             let filteredAdventures = filterFunction(adventures, filters);
 
             //Updates the filtered adventures list to the DOM
@@ -192,6 +193,7 @@
 
             // TODO: MODULE_FILTERS
             // 1. Invoke saveFiltersToLocalStorage here
+            saveFiltersToLocalStorage(filters);
         }
 
         //executed when clear button is clicked on category filter dropdown
@@ -205,6 +207,7 @@
 
             // TODO: MODULE_FILTERS
             // 1. Invoke saveFiltersToLocalStorage here
+            saveFiltersToLocalStorage(filters);
         }
 
         //helper function
