@@ -148,10 +148,15 @@ function captureFormSubmit(adventure) {
     try {
       let res = await fetch(url, {
         method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
         body: bodyString,
       })
+      alert("Success");
+      window.location.reload();
     } catch (err) {
-      console.log(err);
+      alert("Failed");
     }
   });
 

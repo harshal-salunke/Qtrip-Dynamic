@@ -5,7 +5,7 @@ async function fetchReservations() {
   // TODO: MODULE_RESERVATIONS
   // 1. Fetch Reservations by invoking the REST API and return them
   try{
-    const result = await fetch(config.backendEndpoint + `/reservation/`);
+    const result = await fetch(config.backendEndpoint + `/reservations/`);
     const data = await result.json();
     return data;
   } catch (e) {
@@ -38,29 +38,36 @@ function addReservationToTable(reservations) {
     1. The date of adventure booking should appear in the format D/MM/YYYY (en-IN format) Example:  4/11/2020 denotes 4th November, 2020
     2. The booking time should appear in a format like 4 November 2020, 9:32:31 pm
   */
- reservations.map((key, idx) => {
-  let ele = document.createElement("tr");
-  ele.innerHTML = `
-        <th scope="row >${key.id}</th>
-        <td>${key.name}</td>
-        <td>${key.adventureName}</td>
-        <td>${key.person}</td>
-        <td>${new Date(key.date).toLocaleDateString("en-IN")}</td>
-        <td>${key.price}</td>
-        <td>${new Date(key.time).toLocaleDateString("en-IN",{
-          
-        })}</td>
-        <td><div class="resevation-visit-button" id=${
-          key.id
-        }><a href= "../detail/?adventure=${
-          key.adventure
-        }">Visit Adventure</a></div></td>
-        <td></td>
-  `;
-
-  document.getElementById("reservation-table").appendChild(ele);
- });
-
+    let reservationTable = document.getElementById('reservation-table')
+    reservations.forEach(rev => {
+      let row = document.createElement('tr');
+      row.innerHTML =
+      //template string starts
+      `
+      <td>${rev.id}</td>
+      <td>${rev.name}</td>
+      <td>${rev.adventureName}</td>
+      <td>${parseInt(rev.person)}</td>
+      <td>${new Date(rev.date).toLocaleDateString("en-IN" ,)}</td>
+      <td>${rev.price}</td>
+      <td>${new Date(rev.time).toLocaleString("en-IN", {
+          year: "numeric",
+          day: "numeric",
+          month: "long",
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: true,
+      })}</td>
+      <td>
+        <div class="reservation-visit-button" id=${rev.id}>
+          <a href="../detail/?adventure=${rev.adventure}">Visit Adventure</a>
+        </div>
+      </td>
+      ` ;//template string ends
+      reservationTable.appendChild(row);
+    })
+  
 }
 
 export { fetchReservations, addReservationToTable };
